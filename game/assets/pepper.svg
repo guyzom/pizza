@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Pepper, a black and white border collie with pointed ears</title>
+  <circle cx="128" cy="128" r="128" fill="#f0e0e3"/>
+  <path d="M63 237q12-71 65-71t65 71" fill="#354048"/>
+  <path d="M102 182h52l16 55H86z" fill="#fff8ee"/>
+  <path d="M72 186q56 26 112 0l1 18q-57 27-114 0z" fill="#bd8a95"/>
+  <circle cx="128" cy="211" r="9" fill="#fff3c9"/>
+  <path d="M71 98 57 33q37 4 52 39m38 0q15-35 52-39l-14 65" fill="#354048"/>
+  <path d="m69 49 9 37 20-12m60 0 20 12 9-37" fill="#9c7b81"/>
+  <path d="M64 101q12-50 64-50t64 50l-4 50q-15 48-60 50-45-2-60-50z" fill="#354048"/>
+  <path d="M128 52q-10 17-6 44l-17 36h46l-17-36q4-27-6-44" fill="#fff8ee"/>
+  <ellipse cx="101" cy="112" rx="8" ry="10" fill="#172328"/>
+  <ellipse cx="155" cy="112" rx="8" ry="10" fill="#172328"/>
+  <circle cx="103" cy="109" r="2.5" fill="#fff"/><circle cx="157" cy="109" r="2.5" fill="#fff"/>
+  <ellipse cx="128" cy="157" rx="43" ry="30" fill="#fff8ee"/>
+  <path d="M114 137q14-8 28 0-2 17-14 17t-14-17" fill="#253138"/>
+  <path d="M128 154v10m0 0q-12 12-26 2m26-2q12 12 26 2" fill="none" stroke="#617078" stroke-width="4" stroke-linecap="round"/>
+  <path d="M118 177q10 5 20 0v9q-10 13-20 0z" fill="#da9399"/>
+</svg>

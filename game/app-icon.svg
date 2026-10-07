@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Pizza Pups paw and pizza app icon</title>
+  <rect width="512" height="512" rx="112" fill="#092633"/>
+  <circle cx="256" cy="256" r="194" fill="#143f47"/>
+  <path d="M174 348 361 193 401 365z" fill="#e39b43" stroke="#e39b43" stroke-width="28" stroke-linejoin="round"/>
+  <path d="m185 346 169-138 34 148z" fill="#ffe1a0"/>
+  <path d="m354 191 40 174" fill="none" stroke="#c57b3c" stroke-width="27" stroke-linecap="round"/>
+  <circle cx="312" cy="277" r="15" fill="#c76a56"/><circle cx="335" cy="327" r="14" fill="#c76a56"/><circle cx="256" cy="324" r="11" fill="#c76a56"/>
+  <path d="M130 282c-14-11-10-37 5-48l33-32c13-13 30-13 43 0l33 32c16 13 20 37 5 48-13 11-32 3-45 0-9-3-19-3-28 0-13 3-32 11-46 0z" fill="#bfe0d0"/>
+  <ellipse cx="126" cy="203" rx="19" ry="27" transform="rotate(-30 126 203)" fill="#bfe0d0"/>
+  <ellipse cx="166" cy="168" rx="20" ry="29" transform="rotate(-12 166 168)" fill="#bfe0d0"/>
+  <ellipse cx="210" cy="169" rx="20" ry="29" transform="rotate(12 210 169)" fill="#bfe0d0"/>
+  <ellipse cx="251" cy="204" rx="19" ry="27" transform="rotate(30 251 204)" fill="#bfe0d0"/>
+</svg>

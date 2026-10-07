@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#092633" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="חברים על ארבע" />
+  <title>חברים על ארבע — הרפתקת פיצה</title>
+  <link rel="icon" href="app-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="polish.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="description" content="ארבעה כלבים חברים בהרפתקת פיצה תלת־ממדית. שליטה במגע, שלושה עולמות, בלי הפסדים ובלי פרסומות." />
+</head>
+<body>
+  <noscript><p class="no-script">צריך להפעיל JavaScript כדי שהכלבים יוכלו לשחק.</p></noscript>
+  <div id="app">
+    <canvas id="c3d" aria-hidden="true"></canvas>
+    <div id="no-webgl" class="no-webgl" hidden>
+      <div class="no-webgl-card">
+        <div class="no-webgl-emoji">🐶🍕</div>
+        <h1 id="fallback-title">רגע, החברים מתארגנים</h1>
+        <p id="fallback-message">צריך דפדפן עם תלת־ממד.<br />נסו לפתוח בספארי מעודכן.</p>
+        <button class="big-btn" type="button" onclick="location.reload()">מנסים שוב ↻</button>
+      </div>
+    </div>
+    <div id="ui">
+      <section id="screen-start" class="screen active">
+        <div class="start-toolbar"><span class="eyebrow">הרפתקה קטנה. חיוך גדול.</span><button id="btn-settings-start" class="hud-btn" type="button" aria-label="הגדרות להורים">⚙</button></div>
+        <div class="start-topband">
+          <h1 class="game-title"><span class="t-dog">חברים</span> <span class="t-paws">על ארבע</span></h1>
+          <p class="game-sub">🍕 הרפתקת פיצה 🍕</p>
+        </div>
+        <div class="start-spacer" aria-hidden="true"></div>
+        <div class="start-bottomband">
+          <button id="btn-start" class="big-btn pulse" type="button" data-primary><span class="btn-emoji">▶</span> משחקים!</button>
+          <button id="btn-continue" class="ghost-btn" type="button" hidden>ממשיכים במסע ▶</button>
+          <button id="btn-help" class="ghost-btn" type="button">איך משחקים? 👆</button>
+          <p class="start-note">בלי הפסדים · בלי פרסומות · בלי חשבון</p>
+        </div>
+      </section>
+      <section id="screen-pick" class="screen">
+        <div class="panel-topband"><h2 class="panel-title">בוחרים חבר!</h2></div>
+        <div class="pick-spacer" aria-hidden="true"></div>
+        <div class="pick-bottomband">
+          <div class="dog-grid" id="dog-grid"></div>
+          <button id="btn-pick-back" class="ghost-btn" type="button">◀ אחורה</button>
+        </div>
+      </section>
+      <section id="screen-map" class="screen solid-screen">
+        <header class="map-header">
+          <h2 class="panel-title">המסע 🗺️</h2>
+          <p class="map-dog-label" id="map-dog-label"></p>
+          <p class="map-progress" id="map-progress"></p>
+        </header>
+        <div class="map-board" id="map-board"></div>
+        <div class="map-actions">
+          <button id="btn-map-play" class="big-btn" type="button" data-primary>ממשיכים במסע ▶</button>
+          <button id="btn-map-repick" class="chip-btn" type="button">🐶 החלפת חבר</button>
+          <button id="btn-settings-map" class="chip-btn" type="button" aria-label="הגדרות להורים">⚙ הגדרות</button>
+          <button id="btn-stickers" class="chip-btn" type="button">✨ מדבקות</button>
+        </div>
+      </section>
+      <section id="screen-stickers" class="screen solid-screen">
+        <header class="map-header"><h2 class="panel-title">אלבום מדבקות ✨</h2></header>
+        <div class="sticker-grid" id="sticker-grid"></div>
+        <button id="btn-stickers-back" class="big-btn" type="button">◀ אחורה</button>
+      </section>
+      <section id="screen-game" class="screen" tabindex="-1" aria-label="אזור המשחק">
+        <div id="touch-pad" class="touch-pad" aria-hidden="true"></div>
+        <div class="hud hud-top">
+          <div class="hud-left">
+            <div class="hud-pill hearts-pill" id="hearts"><span class="h">❤️</span><span class="h">❤️</span><span class="h">❤️</span></div>
+            <div class="hud-pill" id="pizza-count">🍕 0</div>
+          </div>
+          <div class="hud-right">
+            <div class="hud-pill stage-pill" id="stage-label" dir="ltr">1-1</div>
+            <button id="btn-mute" class="hud-btn" type="button" aria-label="שקט">🔊</button>
+            <button id="btn-pause" class="hud-btn" type="button" aria-label="השהה">⏸️</button>
+          </div>
+        </div>
+        <progress id="stage-progress" class="stage-progress" max="100" value="0" aria-label="התקדמות בשלב"></progress>
+        <div class="boss-bar" id="boss-hp" hidden><span class="boss-face">🥦</span><span class="boss-track"><span class="boss-fill" id="boss-fill"></span></span></div>
+        <div id="combo" class="combo" hidden></div>
+        <div id="stage-banner" class="stage-banner" role="status" hidden></div>
+        <div id="toast" class="toast" role="status" hidden></div>
+        <p class="drag-hint" id="drag-hint">👆 גוררים הצדה · מקישים וקופצים</p>
+        <div class="play-controls" role="group" aria-label="כפתורי המשחק">
+          <button id="btn-left" class="play-control" type="button" aria-label="מסלול שמאלה"><span aria-hidden="true">←</span><small>שמאלה</small></button>
+          <button id="btn-right" class="play-control" type="button" aria-label="מסלול ימינה"><span aria-hidden="true">→</span><small>ימינה</small></button>
+        <button id="btn-super" class="super-btn" type="button" disabled>
+          <span class="super-fill" id="super-fill"></span>
+          <span class="super-text"><span class="super-emoji">⭐</span><span id="super-label">כוח על</span></span>
+        </button>
+          <button id="btn-jump" class="play-control jump-control" type="button" aria-label="קפיצה"><span aria-hidden="true">↑</span><small>קפיצה</small></button>
+        </div>
+      </section>
+      <section id="screen-pause" class="screen overlay-screen" role="dialog" aria-modal="true" aria-label="הפסקה">
+        <div class="overlay-card">
+          <h2>הפסקה ⏸️</h2><p id="pause-stats"></p>
+          <button id="btn-resume" class="big-btn" type="button">▶ ממשיכים!</button>
+          <button id="btn-settings-pause" class="ghost-btn" type="button">⚙ הגדרות</button>
+          <button id="btn-exit-map" class="ghost-btn" type="button">🗺️ למפה</button>
+        </div>
+      </section>
+      <section id="screen-clear" class="screen overlay-screen" role="dialog" aria-modal="true" aria-label="סיום השלב">
+        <div class="overlay-card win-card">
+          <div class="win-emoji" id="clear-emoji">🎉</div><h2 id="clear-title">כל הכבוד!</h2>
+          <div class="stars-row" id="stars-row">⭐⭐⭐</div><p id="clear-stats"></p>
+          <p id="clear-best" class="clear-best"></p>
+          <p id="clear-rewards" class="clear-rewards" role="status"></p>
+          <button id="btn-clear-continue" class="big-btn" type="button" data-primary>להרפתקה הבאה ▶</button>
+          <button id="btn-clear-replay" class="ghost-btn" type="button">🔁 עוד סיבוב בשלב</button>
+          <p id="clear-save" class="small-note" role="status"></p>
+          <button id="btn-clear-map" class="ghost-btn" type="button">🗺️ למפה</button>
+        </div>
+      </section>
+      <section id="screen-retry" class="screen overlay-screen" role="dialog" aria-modal="true" aria-label="ניסיון נוסף">
+        <div class="overlay-card">
+          <div class="win-emoji">🐶💪</div><h2>ננסה שוב!</h2><p>אתם אלופים!</p>
+          <button id="btn-retry" class="big-btn" type="button">🔁 שוב</button>
+          <button id="btn-retry-map" class="ghost-btn" type="button">🗺️ למפה</button>
+        </div>
+      </section>
+      <section id="screen-help" class="screen solid-screen instruction-screen" aria-labelledby="help-title">
+        <div class="info-card">
+          <span class="eyebrow">מוכנים להרפתקה?</span><h2 class="panel-title" id="help-title">אצבע אחת. מלא פיצות!</h2>
+          <div class="lesson-grid">
+            <div class="lesson"><div class="gesture" aria-hidden="true">👆 ↔</div><h3>גוררים הצדה</h3><p>הכלב עובר בין המסלולים</p></div>
+            <div class="lesson"><div class="gesture" aria-hidden="true">👆 ↑</div><h3>מקישים וקופצים</h3><p>מעל הברוקולי, ישר לפיצה!</p></div>
+            <div class="lesson"><div class="gesture" aria-hidden="true">🍕 ⭐</div><h3>אוספים ומפעילים</h3><p>כשהכוכב מואר, לוחצים עליו</p></div>
+          </div>
+          <p class="reassurance">הכלב רץ בעצמו. גם כשנתקלים — ממשיכים יחד 💚</p>
+          <button id="btn-help-done" class="big-btn" type="button" data-primary>הבנתי, קדימה! ▶</button>
+          <p class="small-note">אפשר גם ללחוץ על כפתורי הכיוון והקפיצה שבתחתית המסך.</p>
+          <p class="small-note">במחשב: חצים ימינה ושמאלה · רווח לקפיצה · Escape להפסקה</p>
+        </div>
+      </section>
+      <section id="screen-settings" class="screen solid-screen settings-screen" aria-labelledby="settings-title">
+        <div class="info-card settings-card">
+          <span class="eyebrow">בקצב שלכם</span><h2 class="panel-title" id="settings-title">פינה להורים ⚙</h2>
+          <label class="setting-row"><span><strong>קצב נינוח</strong><small>ריצה איטית יותר, החל מהשלב הבא</small></span><input id="setting-gentle" type="checkbox" /></label>
+          <label class="setting-row"><span><strong>פחות תנועה</strong><small>בלי רעידות מצלמה וקישוטים מהבהבים</small></span><input id="setting-calm" type="checkbox" /></label>
+          <label class="setting-row"><span><strong>ללא צלילים</strong><small>אפשר גם לשחק בשקט</small></span><input id="setting-muted" type="checkbox" /></label>
+          <label class="setting-row"><span><strong>איכות תמונה</strong><small>אוטומטי מתאים לרוב המכשירים</small></span><select id="setting-quality"><option value="auto">אוטומטי</option><option value="battery">חיסכון בסוללה</option><option value="high">גבוהה</option></select></label>
+          <p class="small-note">ההתקדמות נשמרת רק בדפדפן הזה. אין חשבונות, רכישות או מעקב.</p>
+          <p class="small-note" id="storage-note" role="status" hidden>הדפדפן לא מאפשר שמירה. אפשר לשחק, אבל ההתקדמות עלולה להיעלם בסגירה.</p>
+          <p class="small-note" id="recovery-note" role="status" hidden>שחזרנו את ההתקדמות מעותק מקומי שמור. אפשר להמשיך במסע 💚</p>
+          <p class="small-note" id="install-state">באייפד: שיתוף בספארי ← הוספה למסך הבית.</p>
+          <button id="btn-settings-back" class="big-btn" type="button" data-primary>שומרים וחוזרים ✓</button>
+        </div>
+      </section>
+      <div id="celebration" class="celebration" hidden><div class="cele-text" id="cele-text">איזו חגיגה!</div></div>
+    </div>
+  </div>
+  <script src="vendor/three.min.js"></script>
+  <script src="audio.js"></script>
+  <script src="dogs.js"></script>
+  <script src="meshes.js"></script>
+  <script src="postfx.js"></script>
+  <script src="levels.js"></script>
+  <script src="core.js"></script>
+  <script src="game.js"></script>
+  <script src="install.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Coco, a fluffy cream spitz with small pointed ears</title>
+  <circle cx="128" cy="128" r="128" fill="#e8e2ef"/>
+  <path d="M60 237q7-24 21-30l-8-12 21-3-4-12 25 4 13-15 13 15 25-4-4 12 21 3-8 12q14 6 21 30z" fill="#efe0bd"/>
+  <path d="M78 186q50 29 100 0l3 20q-53 26-106 0z" fill="#aa9cbf"/>
+  <circle cx="128" cy="213" r="9" fill="#fff3c9"/>
+  <path d="m67 91-5-57q31 5 42 38m48 0q11-33 42-38l-5 57" fill="#dfc99d"/>
+  <path d="m74 49 5 31 17-8m64 0 17 8 5-31" fill="#cdb195"/>
+  <path d="M128 51q32 0 48 25l13 1-2 16 13 10-5 14 10 13-10 13 3 16-14 7-4 17-18 1-11 13-23-5-23 5-11-13-18-1-4-17-14-7 3-16-10-13 10-13-5-14 13-10-2-16 13-1q16-25 48-25" fill="#efe0bd"/>
+  <path d="M85 109q19-23 34-8m18 0q15-15 34 8" fill="none" stroke="#f8efdc" stroke-width="13" stroke-linecap="round"/>
+  <ellipse cx="104" cy="115" rx="7" ry="9" fill="#354048"/>
+  <ellipse cx="152" cy="115" rx="7" ry="9" fill="#354048"/>
+  <circle cx="106" cy="112" r="2.5" fill="#fff"/><circle cx="154" cy="112" r="2.5" fill="#fff"/>
+  <ellipse cx="128" cy="154" rx="36" ry="29" fill="#fff6e4"/>
+  <path d="M116 139q12-7 24 0-1 16-12 16t-12-16" fill="#354048"/>
+  <path d="M128 155v8m0 0q-11 11-21 1m21-1q11 11 21 1" fill="none" stroke="#9b8167" stroke-width="4" stroke-linecap="round"/>
+  <path d="M118 175q10 5 20 0v9q-10 13-20 0z" fill="#d99f9d"/>
+</svg>

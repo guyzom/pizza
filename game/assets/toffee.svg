@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Toffee, a rust and tan dachshund with long ears</title>
+  <circle cx="128" cy="128" r="128" fill="#eee7d2"/>
+  <path d="M71 237q4-68 57-68t57 68" fill="#b86f41"/>
+  <path d="M95 199h66l12 38H83z" fill="#e0b487"/>
+  <path d="M77 187q51 27 102 0l2 21q-53 23-106 0z" fill="#c4aa62"/>
+  <circle cx="128" cy="216" r="9" fill="#fff3c9"/>
+  <ellipse cx="70" cy="132" rx="25" ry="77" transform="rotate(8 70 132)" fill="#895131"/>
+  <ellipse cx="186" cy="132" rx="25" ry="77" transform="rotate(-8 186 132)" fill="#895131"/>
+  <path d="M71 96q0-48 57-48t57 48v47q-7 50-57 60-50-10-57-60z" fill="#b86f41"/>
+  <ellipse cx="102" cy="108" rx="13" ry="7" fill="#e0b487"/>
+  <ellipse cx="154" cy="108" rx="13" ry="7" fill="#e0b487"/>
+  <ellipse cx="102" cy="124" rx="7" ry="9" fill="#29333a"/>
+  <ellipse cx="154" cy="124" rx="7" ry="9" fill="#29333a"/>
+  <circle cx="104" cy="121" r="2.5" fill="#fff"/><circle cx="156" cy="121" r="2.5" fill="#fff"/>
+  <ellipse cx="128" cy="163" rx="38" ry="30" fill="#e0b487"/>
+  <path d="M112 143q16-8 32 0-3 19-16 19t-16-19" fill="#29333a"/>
+  <path d="M128 163v8m0 0q-12 10-24 0m24 0q12 10 24 0" fill="none" stroke="#78513a" stroke-width="4" stroke-linecap="round"/>
+</svg>

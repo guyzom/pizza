@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Biscuit, a golden retriever with floppy ears</title>
+  <circle cx="128" cy="128" r="128" fill="#d7ebe4"/>
+  <path d="M67 235c5-43 27-64 61-64s56 21 61 64" fill="#d8a052"/>
+  <path d="M77 181q51 32 102 0l3 22q-54 29-108 0z" fill="#62a79b"/>
+  <circle cx="128" cy="209" r="9" fill="#fff3c9"/>
+  <ellipse cx="78" cy="119" rx="29" ry="65" transform="rotate(13 78 119)" fill="#b67d37"/>
+  <ellipse cx="178" cy="119" rx="29" ry="65" transform="rotate(-13 178 119)" fill="#b67d37"/>
+  <path d="M68 94q0-49 60-49t60 49v45q-5 53-60 60-55-7-60-60z" fill="#d8a052"/>
+  <path d="M101 64q17-11 27 0 7-11 22-1" fill="none" stroke="#e5b775" stroke-width="8" stroke-linecap="round"/>
+  <ellipse cx="104" cy="113" rx="8" ry="11" fill="#29333a"/>
+  <ellipse cx="152" cy="113" rx="8" ry="11" fill="#29333a"/>
+  <circle cx="106" cy="110" r="2.5" fill="#fff"/><circle cx="154" cy="110" r="2.5" fill="#fff"/>
+  <ellipse cx="128" cy="153" rx="40" ry="29" fill="#efd0a2"/>
+  <path d="M114 138q14-8 28 0-2 17-14 17t-14-17" fill="#29333a"/>
+  <path d="M128 154v9m0 0q-13 13-25 1m25-1q13 13 25 1" fill="none" stroke="#705339" stroke-width="4" stroke-linecap="round"/>
+  <path d="M117 174q11 6 22 0v10q-11 14-22 0z" fill="#dc9390"/>
+</svg>
