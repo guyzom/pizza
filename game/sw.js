@@ -1,7 +1,7 @@
 /* Keep an entire release together. Bump VERSION whenever an app file changes.
  * Workers wait until existing tabs close, keeping each active game on one release. */
 "use strict";
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 const PREFIX = "pizza-pups:" + self.registration.scope + ":";
 const CACHE = PREFIX + VERSION;
 const SHELL = ["./", "index.html", "style.css", "polish.css", "core.js", "levels.js",

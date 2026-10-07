@@ -144,8 +144,13 @@
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   if (renderer.outputColorSpace !== undefined) renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.12;
+  renderer.toneMappingExposure = 1.0;
   const scene = new THREE.Scene();
+  // A material sky shares the scene's color transform in direct and HDR modes.
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(190, 16, 8),
+    new THREE.MeshBasicMaterial({ side: THREE.BackSide, fog: false, depthWrite: false }));
+  sky.frustumCulled = false; sky.renderOrder = -1000;
+  scene.add(sky);
   const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 220);
   camera.position.set(0, 3, 7);
   let envTex = null;
@@ -165,7 +170,7 @@
   sun.shadow.camera.left = -12; sun.shadow.camera.right = 12;
   sun.shadow.camera.top = 12; sun.shadow.camera.bottom = -12;
   scene.add(sun);
-  const keyLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  const keyLight = new THREE.DirectionalLight(0xfff5e8, 0.25);
   keyLight.position.set(0, 3, 8);
   scene.add(keyLight);
   scene.fog = new THREE.Fog(0x0a2233, 30, 150);
@@ -182,7 +187,8 @@
     try { th = GAr.worldTheme && GAr.worldTheme(world); } catch (_) {}
     th = th || {};
     const bg = th.bg != null ? th.bg : 0x0a2233;
-    scene.background = new THREE.Color(bg);
+    scene.background = null;
+    sky.material.color.set(bg);
     scene.fog.color.set(th.fog != null ? th.fog : bg);
     scene.fog.near = th.fogNear != null ? th.fogNear : 30;
     scene.fog.far = th.fogFar != null ? th.fogFar : 150;
@@ -907,15 +913,17 @@
   window.addEventListener("pageshow", () => { pageHidden = document.hidden; lastFrame = 0; requestFrame(); });
   canvas.addEventListener("webglcontextlost", (e) => {
     e.preventDefault(); contextLost = true; suspendPage();
+    // Release resources while their original context is still associated with them.
+    if (post) { post.dispose(); post = null; }
+    if (envTex) { envTex.dispose(); envTex = null; }
+    scene.environment = null;
     $("no-webgl").hidden = false;
     $("fallback-title").textContent = "מחזירים את התמונה…";
     $("fallback-message").textContent = "המשחק בהפסקה. ההתקדמות שכבר שמרתם נשארה אצלכם.";
   });
   canvas.addEventListener("webglcontextrestored", () => {
     contextLost = false;
-    if (post) { post.dispose(); post = null; }
-    if (envTex) envTex.dispose();
-    try { envTex = GAr.makeEnvironment(renderer); scene.environment = envTex; } catch (_) { scene.environment = null; }
+    try { envTex = GAr.makeEnvironment(renderer); scene.environment = envTex; } catch (_) { envTex = null; scene.environment = null; }
     try { if (save.settings.quality !== "battery") post = window.GamePostFX && window.GamePostFX.create(renderer); } catch (_) {}
     $("no-webgl").hidden = true; onResize();
   });
@@ -987,6 +995,8 @@
         jumpY: G.jumpY, onGround: G.onGround, pizzas: G.pizzas, shieldUntil: G.shieldUntil, multiplier: G.pizzaMult,
         fx: fxList.length, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures,
         pixelRatio: renderer.getPixelRatio(), frameScheduled: !!frameId, mode,
+        graphicsQuality: save.settings.quality, postfxActive: !!post, contextLost,
+        postfxSupported: !!(renderer.capabilities.isWebGL2 && renderer.extensions.has("EXT_color_buffer_float")),
         dogId: save.dogId, playerDog: dogSnapshot(playerMesh),
         showcaseDogs: showcaseMeshes.map(dogSnapshot) }),
       contextExtension: () => renderer.getContext().getExtension("WEBGL_lose_context")

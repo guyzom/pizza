@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse, functools, hashlib, http.server, json, threading, traceback
 from completion_probe import wait_for_completion
 from family_browser import run_family_checks
+from graphics_browser import run_graphics_checks
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
@@ -161,6 +162,7 @@ try:
         page.locator("#btn-pause").click()
         page.wait_for_function("!!navigator.serviceWorker.controller", timeout=60000)
         check("offline worker is active", page.evaluate("navigator.serviceWorker.ready.then(() => true)"))
+        report["graphics"] = run_graphics_checks(browser, URL, OUT, args.engine, check)
         run_family_checks(browser, URL, OUT, args.engine, check)
         # WebKit setOffline can reject even literal service-worker responses
         # (microsoft/playwright#42775). Stop the actual origin for BOTH engines.

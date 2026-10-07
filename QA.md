@@ -6,12 +6,13 @@ The `Game quality` workflow runs JavaScript syntax checks and Node tests, follow
 
 | Suite | Coverage | Boundary |
 | --- | --- | --- |
-| `tests/*.test.cjs` | Four-legged dog meshes and animation, portrait/asset consistency, save normalization and recovery, monotonic progress, scoring, lanes, pixel budgets, audio cleanup, bounded timing and deployment configuration | Mesh checks inspect geometry and resources; audio uses a mocked graph; workflow assertions inspect configuration rather than emulate the Actions scheduler |
+| `tests/*.test.cjs` | Four-legged dog meshes and animation, portrait/asset consistency, square tile mapping, environment and post-processing resource ownership, save normalization and recovery, monotonic progress, scoring, lanes, pixel budgets, audio cleanup, bounded timing and deployment configuration | Mesh and post-processing checks inspect resources and state with mocks; audio uses a mocked graph; workflow assertions inspect configuration rather than emulate the Actions scheduler |
 | `tests/simulation.py` | All nine stages, all twelve stickers, input cancellation, shield pause duration, 100/250/500 ms frame cadences and pause/resume clock reset | Real DOM and Three.js objects with a null renderer and controlled clock; no graphics or device-performance measurement |
 | `tests/family_flows.py` | Native controls, keyboard focus, modal navigation, replay scores, save-failure messages and control bounds at five viewport sizes | Null renderer; layout measurements do not certify physical touch or assistive hardware |
 | `tests/browser.py` | Actual WebGL, touch/RTL direction, pause/resume, settings, stage completion, save recovery, repeated-stage graphics-resource counts and offline reload | Chromium and Linux WebKit; no physical iPad certification |
+| `tests/graphics_browser.py` | GPU color parity between direct and HDR rendering, all three worlds, graphics-quality switching, repeated render-target rebuilds, active context loss and explicit resume after restoration | Called by the real-browser suite; floating-point bloom and context-loss checks require the corresponding browser capabilities |
 
-Reproduction commands are in [README.md](README.md). The real-render suite writes engine-specific screenshots and reports under `test-results/`. `tests/family_browser.py` is called by that suite and does not need a separate invocation.
+Reproduction commands are in [README.md](README.md). The real-render suite writes engine-specific screenshots and reports under `test-results/`. `tests/family_browser.py` and `tests/graphics_browser.py` are called by that suite and do not need separate invocations. [Rendering](docs/RENDERING.md) explains the color-output comparison and includes matched before/after captures.
 
 ## Offline checks
 

@@ -1,5 +1,5 @@
 /* meshes.js — window.GameArt
- * Pure procedural Three.js (r160). Bright, saturated cartoon/toon look.
+ * Pure procedural Three.js (r160). Soft daylight and matte cartoon materials.
  * Procedural park, kitchen and neighborhood art for Pizza Pups.
  * Everything is a THREE.Group. iPad-friendly poly counts.
  * Models face -Z along the route; feet rest at y = 0.
@@ -35,6 +35,11 @@
     return o;
   }
 
+  function surface(parameters) {
+    // Indirect sky light adds shape without washing out the local surface color.
+    return new THREE.MeshStandardMaterial(Object.assign({ envMapIntensity: 0.32 }, parameters));
+  }
+
   function srgb(tex) { if (tex && "colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace; return tex; }
 
   // =====================================================================
@@ -48,10 +53,10 @@
     var n = 8, s = 64, c = document.createElement("canvas");
     c.width = c.height = n * s; var ctx = c.getContext("2d");
     for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
-      ctx.fillStyle = ((x + y) % 2) ? "#e9412e" : "#fbf0da";
+      ctx.fillStyle = ((x + y) % 2) ? "#b98f78" : "#ded4c2";
       ctx.fillRect(x * s, y * s, s, s);
     }
-    ctx.strokeStyle = "rgba(0,0,0,0.08)"; ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(65,51,41,0.05)"; ctx.lineWidth = 2;
     for (var i = 0; i <= n; i++) { ctx.beginPath(); ctx.moveTo(i * s, 0); ctx.lineTo(i * s, n * s); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, i * s); ctx.lineTo(n * s, i * s); ctx.stroke(); }
     var t = srgb(new THREE.CanvasTexture(c));
     t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -110,16 +115,16 @@
     if (type === "bomber") { floretHex = 0xe5432b; }
     if (type === "boss") { floretHex = 0x2f8f28; scale = 2.3; }
 
-    var eyeW = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 80, specular: 0x888888 });
-    var eyeB = new THREE.MeshPhongMaterial({ color: 0x111111, shininess: 100, specular: 0x445 });
-    var browMat = new THREE.MeshStandardMaterial({ color: 0x123309, roughness: 0.7 });
+    var eyeW = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 24, specular: 0x444444 });
+    var eyeB = new THREE.MeshPhongMaterial({ color: 0x111111, shininess: 32, specular: 0x222222 });
+    var browMat = surface({ color: 0x123309, roughness: 0.7 });
     if (type === "bomber") {
-      var footMat = new THREE.MeshStandardMaterial({ color: stalkHex, roughness: 0.7 });
+      var footMat = surface({ color: stalkHex, roughness: 0.7 });
       // cute round tomato
-      var tomatoMat = new THREE.MeshStandardMaterial({ color: floretHex, roughness: 0.4, emissive: 0x3a0a04, emissiveIntensity: 0.25 });
+      var tomatoMat = surface({ color: floretHex, roughness: 0.78, emissive: 0x3a0a04, emissiveIntensity: 0.08 });
       var body = new THREE.Mesh(new THREE.SphereGeometry(0.5, 22, 18), tomatoMat);
       body.scale.set(1.1, 0.95, 1.1); body.position.y = 0.55; addOutline(body, 1.05); bob.add(body);
-      var leaf = new THREE.MeshStandardMaterial({ color: 0x3a9e30, roughness: 0.6 });
+      var leaf = surface({ color: 0x3a9e30, roughness: 0.6 });
       for (var i = 0; i < 5; i++) {
         var a = (i / 5) * Math.PI * 2;
         var lf = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.2, 5), leaf);
@@ -136,8 +141,8 @@
       addFeet(bob, footMat);
     } else {
       // broccoli
-      var floretMat = new THREE.MeshStandardMaterial({ color: floretHex, roughness: 0.7, emissive: emissive, emissiveIntensity: 0.3, flatShading: true });
-      var stalkMat = new THREE.MeshStandardMaterial({ color: stalkHex, roughness: 0.72 });
+      var floretMat = surface({ color: floretHex, roughness: 0.88, emissive: emissive, emissiveIntensity: 0.08, flatShading: true });
+      var stalkMat = surface({ color: stalkHex, roughness: 0.72 });
       var stalk = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.24, 0.5, 12), stalkMat);
       stalk.position.y = 0.25; addOutline(stalk, 1.06); bob.add(stalk);
       var core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42, 1), floretMat);
@@ -150,7 +155,7 @@
       addFeet(bob, stalkMat);
 
       if (type === "hopper") {
-        var leafMat = new THREE.MeshStandardMaterial({ color: 0x8bc741, roughness: 0.8 });
+        var leafMat = surface({ color: 0x8bc741, roughness: 0.8 });
         [-1, 1].forEach(function (side) {
           var leaf = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 6), leafMat);
           leaf.scale.set(0.6, 1.7, 0.35);
@@ -160,7 +165,7 @@
         });
       }
       if (type === "boss") {
-        var spikeMat = new THREE.MeshStandardMaterial({ color: 0x1f4a17, roughness: 0.5, metalness: 0.2 });
+        var spikeMat = surface({ color: 0x1f4a17, roughness: 0.82, metalness: 0 });
         [[0.5, 0.95, 0], [-0.5, 0.95, 0], [0, 1.3, 0], [0, 0.8, 0.5], [0, 0.8, -0.5], [0.38, 1.15, 0.2], [-0.38, 1.15, 0.2]].forEach(function (d) {
           var sp = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.4, 7), spikeMat);
           sp.position.set(d[0], d[1], d[2]);
@@ -190,7 +195,7 @@
       var bL = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.04, 0.05), bm); bL.position.set(-0.15, eyeY + 0.14, -zFront - 0.02); bL.rotation.z = 0.5; parent.add(bL);
       var bR = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.04, 0.05), bm); bR.position.set(0.15, eyeY + 0.14, -zFront - 0.02); bR.rotation.z = -0.5; parent.add(bR);
       // little smile
-      var mouth = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.02, 6, 12, Math.PI), new THREE.MeshStandardMaterial({ color: 0x2a1010 }));
+      var mouth = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.02, 6, 12, Math.PI), surface({ color: 0x2a1010 }));
       mouth.position.set(0, eyeY - 0.16, -zFront - 0.02); mouth.rotation.set(Math.PI + 0.1, 0, 0); parent.add(mouth);
     }
     function addFeet(parent, fm) {
@@ -226,9 +231,9 @@
     var g = new THREE.Group();
     var spin = new THREE.Group();
     g.add(spin);
-    var crustMat = new THREE.MeshStandardMaterial({ color: gold ? 0xffd24a : 0xd39a4a, roughness: 0.65, metalness: gold ? 0.45 : 0, emissive: gold ? 0xffa800 : 0x2a1500, emissiveIntensity: gold ? 0.6 : 0.08 });
-    var cheeseMat = new THREE.MeshStandardMaterial({ color: gold ? 0xfff0a0 : 0xffcf5e, roughness: 0.5, emissive: gold ? 0xffe060 : 0x3a2a00, emissiveIntensity: gold ? 0.45 : 0.05 });
-    var pepMat = new THREE.MeshStandardMaterial({ color: gold ? 0xffb84a : 0xc0301c, roughness: 0.45, emissive: gold ? 0xff9020 : 0x200500, emissiveIntensity: gold ? 0.4 : 0 });
+    var crustMat = surface({ color: gold ? 0xffd24a : 0xd39a4a, roughness: 0.86, metalness: gold ? 0.12 : 0, emissive: gold ? 0xffa800 : 0x2a1500, emissiveIntensity: gold ? 0.22 : 0.04 });
+    var cheeseMat = surface({ color: gold ? 0xfff0a0 : 0xffcf5e, roughness: 0.82, emissive: gold ? 0xffe060 : 0x3a2a00, emissiveIntensity: gold ? 0.18 : 0.03 });
+    var pepMat = surface({ color: gold ? 0xffb84a : 0xc0301c, roughness: 0.78, emissive: gold ? 0xff9020 : 0x200500, emissiveIntensity: gold ? 0.16 : 0 });
 
     var base = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.54, 0.1, 30), crustMat);
     spin.add(base);
@@ -282,14 +287,14 @@
 
   function parkChunk(length) {
     var g = new THREE.Group();
-    var grassMat = new THREE.MeshStandardMaterial({ color: 0x8cce63, roughness: 1 });
-    var pathMat = new THREE.MeshStandardMaterial({ color: 0xe9cda3, roughness: 0.95 });
-    var woodMat = new THREE.MeshStandardMaterial({ color: 0xb9834d, roughness: 0.85 });
-    var trunkMat = new THREE.MeshStandardMaterial({ color: 0x8d5c36, roughness: 0.9 });
-    var leafMat = new THREE.MeshStandardMaterial({ color: 0x54a64b, roughness: 0.85, flatShading: true });
+    var grassMat = surface({ color: 0x9fbd7b, roughness: 1 });
+    var pathMat = surface({ color: 0xd9bd98, roughness: 0.95 });
+    var woodMat = surface({ color: 0xb9834d, roughness: 0.85 });
+    var trunkMat = surface({ color: 0x8d5c36, roughness: 0.9 });
+    var leafMat = surface({ color: 0x66945b, roughness: 0.85, flatShading: true });
     var flowerColors = [0xffd05b, 0xf795b4, 0xbba3e4];
     var flowerMats = flowerColors.map(function (color) {
-      return new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
+      return surface({ color: color, roughness: 0.8 });
     });
     var grass = new THREE.Mesh(new THREE.BoxGeometry(22, 0.4, length), grassMat);
     grass.position.y = -0.22; grass.receiveShadow = true; g.add(grass);
@@ -303,8 +308,8 @@
     var stemGeo = new THREE.CylinderGeometry(0.022, 0.028, 0.35, 5);
     var petalGeo = new THREE.SphereGeometry(0.12, 6, 5);
     var lampPoleGeo = new THREE.CylinderGeometry(0.045, 0.06, 2.25, 6);
-    var lampMat = new THREE.MeshStandardMaterial({ color: 0x546653, roughness: 0.6 });
-    var lampTopMat = new THREE.MeshStandardMaterial({ color: 0xfff3ca, emissive: 0xffd175, emissiveIntensity: 0.45 });
+    var lampMat = surface({ color: 0x546653, roughness: 0.6 });
+    var lampTopMat = surface({ color: 0xf3dfb4, roughness: 0.86, emissive: 0xffd175, emissiveIntensity: 0.12 });
 
     [-1, 1].forEach(function (side) {
       [0.34, 0.66].forEach(function (height) {
@@ -343,39 +348,40 @@
   function pizzeriaChunk(length) {
     var g = new THREE.Group();
     var width = 9, height = 5;
-    var floorMat = new THREE.MeshStandardMaterial({ map: repeatMap(checkerTexture(), length / 3, width / 3), roughness: 0.5 });
+    // The canvas contains eight tiles per axis; keep each world-space tile square.
+    var floorMat = surface({ map: repeatMap(checkerTexture(), width / 12, length / 12), roughness: 0.9 });
     var floor = new THREE.Mesh(new THREE.BoxGeometry(width, 0.4, length), floorMat);
     floor.position.y = -0.2; floor.receiveShadow = true; g.add(floor);
-    var wallMat = new THREE.MeshStandardMaterial({ color: 0xf6c98a, roughness: 0.8 });
-    var wainMat = new THREE.MeshStandardMaterial({ color: 0xc9793a, roughness: 0.7 });
+    var wallMat = surface({ color: 0xdab995, roughness: 0.8 });
+    var wainMat = surface({ color: 0xaa785a, roughness: 0.7 });
     [-1, 1].forEach(function (sx) {
       var wall = new THREE.Mesh(new THREE.BoxGeometry(0.4, height, length), wallMat);
       wall.position.set(sx * width / 2, height / 2, 0); wall.receiveShadow = true; g.add(wall);
       var wain = new THREE.Mesh(new THREE.BoxGeometry(0.44, 1.4, length), wainMat);
       wain.position.set(sx * width / 2, 0.7, 0); g.add(wain);
       // counters with pots
-      var counterMat = new THREE.MeshStandardMaterial({ color: 0xded4c4, roughness: 0.6 });
+      var counterMat = surface({ color: 0xc8b9a4, roughness: 0.88 });
       var counter = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.0, length * 0.9), counterMat);
       counter.position.set(sx * (width / 2 - 0.7), 0.5, 0); counter.receiveShadow = true; g.add(counter);
-      var potMat = new THREE.MeshStandardMaterial({ color: 0x333840, roughness: 0.4, metalness: 0.6 });
+      var potMat = surface({ color: 0x4f555a, roughness: 0.7, metalness: 0.16 });
       for (var pj = 0; pj < 2; pj++) {
         var pz = -length / 3 + pj * (length / 2);
         var pot = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.26, 0.34, 16), potMat);
         pot.position.set(sx * (width / 2 - 0.7), 1.17, pz); g.add(pot);
-        var cheese = new THREE.Mesh(new THREE.SphereGeometry(0.26, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xffdf7a, roughness: 0.4, emissive: 0x6a5010, emissiveIntensity: 0.2 }));
+        var cheese = new THREE.Mesh(new THREE.SphereGeometry(0.26, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), surface({ color: 0xeac278, roughness: 0.8, emissive: 0x6a5010, emissiveIntensity: 0.06 }));
         cheese.position.set(sx * (width / 2 - 0.7), 1.34, pz); g.add(cheese);
       }
     });
     // ceiling with hanging lamps
-    var ceil = new THREE.Mesh(new THREE.BoxGeometry(width, 0.3, length), new THREE.MeshStandardMaterial({ color: 0xe8b878, roughness: 0.8 }));
+    var ceil = new THREE.Mesh(new THREE.BoxGeometry(width, 0.3, length), surface({ color: 0xcfa982, roughness: 0.8 }));
     ceil.position.y = height; g.add(ceil);
     for (var i = 0; i < 3; i++) {
       var lz = -length / 2 + 4 + i * (length / 3);
-      var lampMat = new THREE.MeshStandardMaterial({ color: 0xfff2c0, emissive: 0xffcf60, emissiveIntensity: 2.2 });
+      var lampMat = surface({ color: 0xf2dfb5, roughness: 0.84, emissive: 0xffcf60, emissiveIntensity: 0.55 });
       var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.26, 14, 12, 0, Math.PI * 2, 0, Math.PI / 2), lampMat);
       lamp.rotation.x = Math.PI; lamp.position.set(0, height - 0.6, lz); g.add(lamp);
-      var cord = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.6, 6), new THREE.MeshStandardMaterial({ color: 0x222 })); cord.position.set(0, height - 0.3, lz); g.add(cord);
-      var light = new THREE.PointLight(0xffd070, 1.2, 14, 1.6); light.position.set(0, height - 0.8, lz); g.add(light);
+      var cord = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.6, 6), surface({ color: 0x222 })); cord.position.set(0, height - 0.3, lz); g.add(cord);
+      var light = new THREE.PointLight(0xffdfae, 0.75, 14, 1.6); light.position.set(0, height - 0.8, lz); g.add(light);
     }
     g.userData.type = "ground"; g.userData.world = 2; g.userData.length = length;
     return g;
@@ -384,18 +390,18 @@
   function rooftopChunk(length) {
     var g = new THREE.Group();
     var width = 9;
-    var roofMat = new THREE.MeshStandardMaterial({ color: 0xcfa486, roughness: 0.85 });
+    var roofMat = surface({ color: 0xcfa486, roughness: 0.85 });
     var floor = new THREE.Mesh(new THREE.BoxGeometry(width, 0.4, length), roofMat);
     floor.position.y = -0.2; floor.receiveShadow = true; g.add(floor);
     // gravel specks / vents
-    var ventMat = new THREE.MeshStandardMaterial({ color: 0x8894b0, roughness: 0.5, metalness: 0.4 });
+    var ventMat = surface({ color: 0x8d969f, roughness: 0.74, metalness: 0.12 });
     for (var v = 0; v < 3; v++) {
       var vz = -length / 2 + 5 + v * (length / 3);
       var vent = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.5, 0.8), ventMat);
       vent.position.set((v % 2 ? 1 : -1) * 3, 0.25, vz); g.add(vent);
     }
     // parapet walls
-    var parapetMat = new THREE.MeshStandardMaterial({ color: 0xf0d4b2, roughness: 0.8 });
+    var parapetMat = surface({ color: 0xf0d4b2, roughness: 0.8 });
     [-1, 1].forEach(function (sx) {
       var wall = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.0, length), parapetMat);
       wall.position.set(sx * width / 2, 0.5, 0); g.add(wall);
@@ -411,12 +417,12 @@
     var bulbColors = [0xff5a5a, 0xffd23a, 0x5affa0, 0x5ab8ff, 0xff8adf];
     for (var s = 0; s < 3; s++) {
       var sz = -length / 2 + 5 + s * (length / 3);
-      var wire = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, width, 5), new THREE.MeshStandardMaterial({ color: 0x222 }));
-      wire.rotation.z = Math.PI / 2; wire.position.set(0, 2.4, sz); g.add(wire);
+      var wire = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, width, 5), surface({ color: 0x222 }));
+      wire.rotation.z = Math.PI / 2; wire.position.set(0, 3.6, sz); g.add(wire);
       for (var bI = 0; bI < 7; bI++) {
         var col = bulbColors[bI % bulbColors.length];
-        var bulb = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 1.8 }));
-        bulb.position.set(-width / 2 + 0.6 + bI * (width - 1.2) / 6, 2.3 - Math.sin(bI / 6 * Math.PI) * 0.15, sz);
+        var bulb = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), surface({ color: col, emissive: col, emissiveIntensity: 0.6 }));
+        bulb.position.set(-width / 2 + 0.6 + bI * (width - 1.2) / 6, 3.5 - Math.sin(bI / 6 * Math.PI) * 0.15, sz);
         bulb.userData.twinkle = true; bulb.userData.phase = Math.random() * 6.28; g.add(bulb);
       }
     }
@@ -430,7 +436,7 @@
       if (o.userData && o.userData.sway) {
         o.rotation.z = Math.sin(t * 2 + o.userData.phase) * 0.12;
       } else if (o.userData && o.userData.twinkle) {
-        var m = o.material; if (m) m.emissiveIntensity = 1.2 + Math.abs(Math.sin(t * 3 + o.userData.phase)) * 1.2;
+        var m = o.material; if (m) m.emissiveIntensity = 0.42 + Math.abs(Math.sin(t * 1.5 + o.userData.phase)) * 0.18;
       }
     });
   }
@@ -444,11 +450,11 @@
     var g = new THREE.Group();
     var stripLen = 60;
     laneXs.forEach(function (x, idx) {
-      var color = (idx === 1) ? 0x7dffbf : 0x66c8ff;
-      var strip = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.02, stripLen), new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.45 }));
+      var color = (idx === 1) ? 0xe0d6ae : 0xd9d1b5;
+      var strip = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.02, stripLen), new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.18 }));
       strip.position.set(x, 0.03, 0); g.add(strip);
       for (var i = 0; i < 14; i++) {
-        var dot = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.02, 0.4), new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.9 }));
+        var dot = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.02, 0.4), new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.52 }));
         dot.position.set(x, 0.045, -stripLen / 2 + i * (stripLen / 14) + 1); g.add(dot);
       }
     });
@@ -527,7 +533,7 @@
       return g;
     }
     if (kind === "poof") {
-      var poofMat = new THREE.MeshStandardMaterial({ color: color === 0xffe27a ? 0xdfe6ee : color, transparent: true, opacity: 0.85, roughness: 1 });
+      var poofMat = surface({ color: color === 0xffe27a ? 0xdfe6ee : color, transparent: true, opacity: 0.85, roughness: 1 });
       for (var pI = 0; pI < 7; pI++) {
         var puff = new THREE.Mesh(new THREE.SphereGeometry(0.12 + Math.random() * 0.1, 8, 6), poofMat.clone());
         var pa = Math.random() * Math.PI * 2;
@@ -543,7 +549,7 @@
       var palette = [0xff5a5a, 0xffd23a, 0x5affa0, 0x5ab8ff, 0xff8adf, 0xffffff];
       for (var i = 0; i < 16; i++) {
         var col = palette[i % palette.length];
-        var m = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.02), new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.5 }));
+        var m = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.02), surface({ color: col, emissive: col, emissiveIntensity: 0.2 }));
         m.userData.vel = new THREE.Vector3((Math.random() - 0.5) * 5, 3 + Math.random() * 4, (Math.random() - 0.5) * 5);
         m.userData.spin = (Math.random() - 0.5) * 14;
         g.add(m);
@@ -552,7 +558,7 @@
       return g;
     }
     // spark (default)
-    var sparkMat = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 1.6 });
+    var sparkMat = surface({ color: color, emissive: color, emissiveIntensity: 0.6 });
     for (var k = 0; k < 12; k++) {
       var sp = new THREE.Mesh(new THREE.SphereGeometry(0.07, 6, 6), sparkMat);
       var aa = Math.random() * Math.PI * 2;
@@ -602,12 +608,12 @@
 
   function worldTheme(world) {
     if (world === 2) {
-      return { bg: 0x3a2416, fog: 0x54331c, fogNear: 16, fogFar: 52, hemiSky: 0xffe0b0, hemiGround: 0x5a3418, hemiInt: 1.3, sunColor: 0xfff2d0, sunInt: 1.5 };
+      return { bg: 0x3a2416, fog: 0x54331c, fogNear: 16, fogFar: 52, hemiSky: 0xf4e8d7, hemiGround: 0x6b5946, hemiInt: 1.05, sunColor: 0xfff1dc, sunInt: 1.25 };
     }
     if (world === 3) {
-      return { bg: 0xffd3ae, fog: 0xffdcc2, fogNear: 18, fogFar: 62, hemiSky: 0xffe2c2, hemiGround: 0x796655, hemiInt: 1.4, sunColor: 0xfff0d2, sunInt: 1.3 };
+      return { bg: 0xffd3ae, fog: 0xffdcc2, fogNear: 18, fogFar: 62, hemiSky: 0xf0dfce, hemiGround: 0x7d7164, hemiInt: 1.1, sunColor: 0xffecd9, sunInt: 1.2 };
     }
-    return { bg: 0xbbe5f2, fog: 0xcfeaf1, fogNear: 20, fogFar: 70, hemiSky: 0xe3f7ff, hemiGround: 0x7aa65a, hemiInt: 1.45, sunColor: 0xfff2d1, sunInt: 1.5 };
+    return { bg: 0xbbe5f2, fog: 0xcfeaf1, fogNear: 20, fogFar: 70, hemiSky: 0xe1edf0, hemiGround: 0x8b856b, hemiInt: 1.12, sunColor: 0xfff4e5, sunInt: 1.25 };
   }
 
   // =====================================================================
@@ -623,22 +629,15 @@
       new THREE.SphereGeometry(50, 24, 12),
       new THREE.ShaderMaterial({
         side: THREE.BackSide,
-        uniforms: { top: { value: new THREE.Color(0xdfefff) }, mid: { value: new THREE.Color(0x8fb6d8) }, bot: { value: new THREE.Color(0x223142) } },
+        uniforms: { top: { value: new THREE.Color(0xd4dfe2) }, mid: { value: new THREE.Color(0xa8b7bd) }, bot: { value: new THREE.Color(0x716b5c) } },
         vertexShader: "varying vec3 vp; void main(){ vp = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
         fragmentShader: "varying vec3 vp; uniform vec3 top; uniform vec3 mid; uniform vec3 bot; void main(){ float h = normalize(vp).y; vec3 c = h > 0.0 ? mix(mid, top, h) : mix(mid, bot, -h); gl_FragColor = vec4(c, 1.0); }"
       })
     );
     s.add(sky);
-    // soft bright panels → shaped highlights on glossy surfaces
-    function panel(w, h, x, y, z, col) {
-      var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: col }));
-      m.position.set(x, y, z); m.lookAt(0, 0, 0); s.add(m);
-    }
-    panel(22, 22, 0, 34, 2, 0xffffff);       // big soft key overhead
-    panel(16, 26, -26, 8, 14, 0xbfd8ff);     // cool side
-    panel(14, 22, 24, 5, -12, 0xffe6c0);     // warm rim
+    // A continuous sky gives broad natural fill without studio-panel reflections.
     try {
-      var target = pmrem.fromScene(s, 0.04);
+      var target = pmrem.fromScene(s, 0.12);
       var tex = target.texture;
       // The public texture owns its render target, including framebuffer storage.
       function releaseTarget() {

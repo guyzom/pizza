@@ -27,14 +27,14 @@
     var sphere = new THREE.SphereGeometry(1, 16, 12);
     var materials = [];
     function material(color, roughness) {
-      var m = new THREE.MeshStandardMaterial({ color: color, roughness: roughness == null ? 0.83 : roughness, metalness: 0 });
+      var m = new THREE.MeshStandardMaterial({ color: color, roughness: roughness == null ? 0.92 : roughness, metalness: 0, envMapIntensity: 0.28 });
       materials.push(m); return m;
     }
     var coat = material(definition.coat), light = material(id === "pepper" ? 0xfff8ee : id === "toffee" ? 0xe0b487 : id === "coco" ? 0xfff3df : 0xf0c983);
     var earCoat = material(id === "biscuit" ? 0xb67d37 : id === "toffee" ? 0x864331 : definition.coat);
-    var earInner = material(id === "coco" ? 0xd8a8a1 : 0xb58a7c), nose = material(0x302b2d, 0.4);
-    var eyeWhite = material(0xfffff1, 0.4), eyeDark = material(0x25262c, 0.32), tongue = material(0xd98792);
-    var collar = material(definition.collar), tag = material(0xd3b973, 0.5);
+    var earInner = material(id === "coco" ? 0xd8a8a1 : 0xb58a7c), nose = material(0x302b2d, 0.58);
+    var eyeWhite = material(0xf4ecdc, 0.65), eyeDark = material(0x25262c, 0.5), tongue = material(0xd98792);
+    var collar = material(definition.collar), tag = material(0xd3b973, 0.78);
     function ellipsoid(parent, name, mat, position, scale) {
       var mesh = new THREE.Mesh(sphere, mat); mesh.name = name;
       mesh.position.set(position[0], position[1], position[2]); mesh.scale.set(scale[0], scale[1], scale[2]);

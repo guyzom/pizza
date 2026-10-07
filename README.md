@@ -2,6 +2,8 @@
 
 A Hebrew, touch-first 3D browser runner starring four dogs: Biscuit, Pepper, Toffee and Coco. The nine-stage journey crosses a sunny dog park, a pizzeria and neighborhood rooftops. Three.js renders four-legged characters and scenery from procedural meshes; Web Audio synthesizes music and effects. The game combines an RTL interface with physical left/right movement, local progress recovery and an installable offline app shell.
 
+Play online: <https://guyzom.github.io/pizza/>.
+
 ![Gameplay: procedural scenery, collectibles and physical direction controls](docs/images/gameplay.png)
 
 ![Character selection in the Hebrew interface](docs/images/characters.png)
@@ -21,7 +23,7 @@ Open <http://localhost:8000/> in a browser with JavaScript and WebGL. Service wo
 - Automatic forward movement, three lanes, jumping, collectible pizzas and character powers. Collisions reduce energy without ending the run; each world ends with a boss stage.
 - Four distinct dog silhouettes: a golden retriever, a border collie, a dachshund and a cream spitz. SVG portraits and muted collar accents match the procedural models.
 - Pointer dragging and tap-to-jump, separate native control buttons, and keyboard support. Hebrew labels use RTL while the directional control row uses physical left/right order.
-- Procedural meshes, recycled ground chunks, explicit graphics-resource disposal and optional capability-gated bloom.
+- Procedural meshes, matte character materials, soft lighting, recycled ground chunks and explicit graphics-resource disposal. Direct rendering and optional capability-gated bloom share the same color transform.
 - Bounded simulation substeps, pause-aware timers and a render loop that stops behind opaque menus or while the page is hidden.
 - Gentle pace, reduced motion, mute and three graphics-quality settings. The pixel budget limits rendering resolution independently of CSS layout.
 - Nine saved best scores, twelve collectible stickers, a local recovery copy and monotonic progress merging across ordinary stale-window writes.
@@ -48,7 +50,7 @@ python tests/browser.py --engine chromium
 xvfb-run -a python tests/browser.py --engine webkit
 ```
 
-The simulation and interaction integration suites use the actual DOM and game callbacks with a controlled clock and a null renderer. The browser suite uses actual WebGL, checks offline reload by stopping its origin server, and writes screenshots and JSON reports to `test-results/`. Linux WebKit does not establish behavior on a physical iPad; synthesized audio is unit-tested with a mocked audio graph. See [QA.md](QA.md) for coverage and device checks.
+The simulation and interaction integration suites use the actual DOM and game callbacks with a controlled clock and a null renderer. The browser suite uses actual WebGL, compares GPU color output, exercises quality switching and context restoration, checks offline reload by stopping its origin server, and writes screenshots and JSON reports to `test-results/`. Linux WebKit does not establish behavior on a physical iPad; synthesized audio is unit-tested with a mocked audio graph. See [QA.md](QA.md) for coverage and device checks.
 
 ## Structure
 
@@ -67,6 +69,8 @@ The simulation and interaction integration suites use the actual DOM and game ca
 | `tests/` | Rules, storage, timing, deployment configuration and browser checks |
 | `.github/workflows/` | Quality checks and manually requested GitHub Pages publication gate |
 
-Further documentation: [Hebrew game guide](game/README.md), [timing](docs/TIMING.md), [controls and saves](docs/CONTROLS_AND_SAVES.md), [deployment](docs/DEPLOYMENT.md), [third-party notices](THIRD_PARTY_NOTICES.md).
+Further documentation: [Hebrew game guide](game/README.md), [rendering](docs/RENDERING.md), [timing](docs/TIMING.md), [controls and saves](docs/CONTROLS_AND_SAVES.md), [deployment](docs/DEPLOYMENT.md), [third-party notices](THIRD_PARTY_NOTICES.md).
 
 Progress stays in the browser for the current origin. There are no accounts, purchases, application analytics or cross-device synchronization. Clearing site data removes both local save copies.
+
+An installed release remains active while game windows are open. After an update is downloaded, closing all game tabs and standalone windows allows the new release to activate; reopening preserves local progress.
