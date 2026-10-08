@@ -176,6 +176,11 @@ try:
         page.reload(wait_until="load")
         page.wait_for_function("!!window.PizzaDiagnostics", timeout=60000)
         check("offline reload includes game and saved character", page.evaluate("JSON.parse(localStorage.getItem('pizza-dogs-save-v1')).dogId === 'toffee'"))
+        license_response = page.evaluate("""async () => {
+          const response = await fetch('vendor/threejs-MIT.txt');
+          return {ok: response.ok, text: await response.text()};
+        }""")
+        check("offline distribution retains the complete Three.js MIT notice", license_response["ok"] and license_response["text"] == (ROOT / "licenses/threejs-MIT.txt").read_text(encoding="utf-8"))
         shot(page, "12-offline-start")
         page.evaluate("localStorage.setItem('pizza-dogs-save-v1','{bad')")
         page.reload(wait_until="load"); page.wait_for_function("!!window.PizzaDiagnostics", timeout=60000)

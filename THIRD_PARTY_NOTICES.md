@@ -7,7 +7,9 @@ It is distributed under the MIT License, with the original copyright header:
 
 > Copyright 2010-2023 Three.js Authors
 
-The complete license is included in [licenses/threejs-MIT.txt](licenses/threejs-MIT.txt).
+The complete license is included in [licenses/threejs-MIT.txt](licenses/threejs-MIT.txt)
+and shipped beside the library in [game/vendor/threejs-MIT.txt](game/vendor/threejs-MIT.txt).
+The shipped copy is also included in the offline release cache.
 
 - Upstream: <https://github.com/mrdoob/three.js/tree/r160>
 - Upstream license: <https://github.com/mrdoob/three.js/blob/r160/LICENSE>
