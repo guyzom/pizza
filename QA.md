@@ -16,7 +16,7 @@ Reproduction commands are in [README.md](README.md). The real-render suite write
 
 ## Offline checks
 
-The browser suite serves responses with `Cache-Control: no-store`, waits for the service worker, then stops the real origin server. A fresh context with service workers blocked must fail to navigate; the installed context must reload successfully with its saved state. This distinguishes the release cache from a running server or ordinary HTTP caching.
+The browser suite serves responses with `Cache-Control: no-store`, waits for the service worker, then stops the real origin server. A fresh context with service workers blocked must fail to navigate; the installed context must reload successfully with its saved state and fetch the complete Three.js MIT notice from the release cache. This distinguishes the release cache from a running server or ordinary HTTP caching.
 
 Both engines use this method. Playwright's WebKit offline emulation has a known limitation with service-worker responses ([microsoft/playwright#42775](https://github.com/microsoft/playwright/issues/42775)). Physical airplane-mode and Home Screen behavior require device checks.
 

@@ -1,11 +1,11 @@
 /* Keep an entire release together. Bump VERSION whenever an app file changes.
  * Workers wait until existing tabs close, keeping each active game on one release. */
 "use strict";
-const VERSION = "1.1.0";
+const VERSION = "1.1.1";
 const PREFIX = "pizza-pups:" + self.registration.scope + ":";
 const CACHE = PREFIX + VERSION;
 const SHELL = ["./", "index.html", "style.css", "polish.css", "core.js", "levels.js",
-  "game.js", "audio.js", "dogs.js", "meshes.js", "postfx.js", "install.js", "vendor/three.min.js",
+  "game.js", "audio.js", "dogs.js", "meshes.js", "postfx.js", "install.js", "vendor/three.min.js", "vendor/threejs-MIT.txt",
   "manifest.webmanifest", "app-icon.svg", "app-icon-192.png", "app-icon-512.png", "apple-touch-icon.png",
   "assets/biscuit.svg", "assets/pepper.svg", "assets/toffee.svg", "assets/coco.svg"];
 self.addEventListener("install", (event) => {
